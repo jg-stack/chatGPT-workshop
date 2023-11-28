@@ -1,8 +1,13 @@
-from openai_functions import create_assistant, create_thread, create_message, create_run, retrieve_run_status, list_messages, print_messages
+from openai_functions import create_assistant, create_thread, upload_file, create_message, create_run, retrieve_run_status, list_messages, print_messages
 import time
 
-ASSISTANT_NAME = "[YOUR ASSISTANT NAME]"
-INSTRUCTIONS = "[YOUR INSTRUCTIONS]"
+ASSISTANT_NAME = "Kramp Assistant"
+INSTRUCTIONS = "You will be given a question about a product. Answer the question as if you were a customer service representative. \
+                If you don't know the answer, you can say 'I don't know' or 'I will find out and get back to you'. \
+                Answer every question in french."
+
+# Upload a file
+file = upload_file("Annual_Report_2022_UK.pdf")
 
 # Create an assistant
 assistant = create_assistant(
@@ -10,7 +15,7 @@ assistant = create_assistant(
     instructions=INSTRUCTIONS,
     model="gpt-4-1106-preview",
     tools=[{"type": "retrieval"}],
-    file_ids=[] 
+    file_ids=[file.id] 
 )
 
 # Create a thread
@@ -20,7 +25,8 @@ thread = create_thread()
 message = create_message(
     thread_id=thread.id,
     role="user",
-    content="How often do you need to replace an oil filter?"
+    # Replace the content with your own question / task to the assistant
+    content="What were the biggest project for the company in 2022?"
 )
 
 # Create a run on the thread

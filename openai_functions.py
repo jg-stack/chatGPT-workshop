@@ -1,6 +1,6 @@
 import openai
 
-OPEN_API_KEY = "[YOUR OPEN API KEY]"
+OPEN_API_KEY = "YOUR API KEY"
 
 # Directly set the API key when initializing the client
 client = openai.OpenAI(api_key=OPEN_API_KEY)
@@ -19,6 +19,17 @@ def create_assistant(name, instructions, model, tools, file_ids):
     )
     print(f"🛠 Assistant created successfully: {assistant.id} - {assistant.name} - {assistant.model}\n")
     return assistant
+
+# Upload a file for the Assistant to use
+def upload_file(file_name):
+    print(f"📁 Uploading file: {file_name}\n")
+    file = client.files.create(
+        file=open(file_name, "rb"),
+        purpose="assistants"
+    )
+    print(f"📁 File uploaded successfully: {file.id} - {file.filename}\n")
+    return file
+
 
 # Create a Thread
 #  A thread is a conversation between a user and an assistant
