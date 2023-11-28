@@ -17,7 +17,7 @@ def create_assistant(name, instructions, model, tools, file_ids):
         tools=tools,
         file_ids=file_ids
     )
-    print("🤖 Assistant created successfully.\n")
+    print(f"🛠 Assistant created successfully: {assistant.id} - {assistant.name} - {assistant.model}\n")
     return assistant
 
 # Create a Thread
@@ -25,7 +25,7 @@ def create_assistant(name, instructions, model, tools, file_ids):
 def create_thread():
     print("🧵 Creating a new thread...\n")
     thread = client.beta.threads.create()
-    print("🧵 Thread created successfully.\n")
+    print(f"🧵 Thread created successfully: {thread.id}\n")
     return thread
 
 # Create a Message in the Thread
@@ -47,7 +47,7 @@ def create_run(thread_id, assistant_id):
         thread_id=thread_id,
         assistant_id=assistant_id
     )
-    print("🏃‍♂️ Run created successfully.\n")
+    print(f"🏃‍♂️ Run created successfully: {run.id}\n")
     return run
 
 # Retrieve the status of a run
