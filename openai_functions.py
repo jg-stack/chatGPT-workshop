@@ -1,10 +1,21 @@
 import openai
+import sys
 
 OPEN_API_KEY = "YOUR API KEY"
 
-# Directly set the API key when initializing the client
-client = openai.OpenAI(api_key=OPEN_API_KEY)
-print("🔑 API client initialized.\n")
+
+try:
+    # Initialize the API client
+    client = openai.OpenAI(api_key=OPEN_API_KEY)
+
+    # Perform a test API call
+    client.models.list()
+
+    print("✅ API key is valid.\n")
+except: 
+    print("❌ API key is invalid.\n")
+    sys.exit()
+
 
 # Create an Assistant
 # An assistant is the custom GPT model that will be used to generate responses
