@@ -3,3 +3,4 @@ global-exclude __pycache__
 /lib
 /include
 /pyvenv.cfg
+*.pyc
