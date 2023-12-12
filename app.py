@@ -1,4 +1,4 @@
-from openai_functions import create_assistant, create_thread, upload_file, create_message, create_run, retrieve_run_status, list_messages, print_messages
+from openai_functions import run_and_print_messages, create_assistant, create_thread, upload_file
 import time
 
 ASSISTANT_NAME = "Kramp Assistant"
@@ -21,37 +21,18 @@ assistant = create_assistant(
 # Create a thread
 thread = create_thread()
 
-# Create a message in the thread
-message = create_message(
-    thread_id=thread.id,
-    role="user",
-    # Replace the content with your own question / task to the assistant
-    content="What were the biggest project for the company in 2022?"
-)
+# Initial query
+initial_query = "What were the biggest project for the company in 2022?"
+run_and_print_messages(thread.id, assistant.id, initial_query)
 
-# Create a run on the thread
-run = create_run(
-    thread_id=thread.id,
-    assistant_id=assistant.id
-)
-
-# Wait for the run to complete
+# Ask user if they want to add a message
 while True:
-    # Retrieve the latest status of the run
-    run_status = retrieve_run_status(
-        thread_id=thread.id,
-        run_id=run.id
-    )
-
-    # Check if the run status is completed
-    if run_status.status == "completed":
+    add_message = input("Do you want to add a message? (y/n): ").lower()
+    if add_message == "y":
+        message_content = input("Enter your message: ")
+        run_and_print_messages(thread.id, assistant.id, message_content)
+    elif add_message == "n":
+        print("No message added, exiting...")
         break
     else:
-        # Wait for a short period before checking again
-        time.sleep(1)
-
-# Now that the run is completed, list and print messages    
-messages = list_messages(thread.id)
-
-# Print the messages in reverse order
-print_messages(messages)
+        print("Invalid input. Please enter 'y' or 'n'.")

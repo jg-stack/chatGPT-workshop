@@ -1,21 +1,19 @@
 import openai
 import sys
+import time
+
 
 OPEN_API_KEY = "YOUR API KEY"
-
 
 try:
     # Initialize the API client
     client = openai.OpenAI(api_key=OPEN_API_KEY)
-
     # Perform a test API call
     client.models.list()
-
     print("✅ API key is valid.\n")
 except: 
     print("❌ API key is invalid.\n")
     sys.exit()
-
 
 # Create an Assistant
 # An assistant is the custom GPT model that will be used to generate responses
@@ -98,3 +96,38 @@ def print_messages(messages):
     for message in reversed(messages.data):
         print(message.role + ": " + message.content[0].text.value + "\n")
     print("📖 All messages printed.\n")
+
+# Wait for a run to complete
+def wait_for_run_to_complete(thread_id, run_id):
+    while True:
+        # Retrieve the latest status of the run
+        run_status = retrieve_run_status(
+            thread_id=thread_id,
+            run_id=run_id
+        )
+
+        # Check if the run status is completed
+        if run_status.status == "completed":
+            print("🏃‍♂️ Run completed.\n")
+            break
+        else:
+            # Wait for a short period before checking again
+            time.sleep(5)
+
+
+def run_and_print_messages(thread_id, assistant_id, content=None):
+    if content:
+        # Create a message in the thread
+        create_message(
+            thread_id=thread_id,
+            role="user",
+            content=content
+        )
+
+    # Create and wait for the run to complete
+    run = create_run(thread_id=thread_id, assistant_id=assistant_id)
+    wait_for_run_to_complete(thread_id, run.id)
+
+    # List and print messages
+    messages = list_messages(thread_id)
+    print_messages(messages)
